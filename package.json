@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "server": "nodemon --exec babel-node index.js",
+    "server": "webpack --colors --progress --mode=development",
     "client": "cd client && yarn start",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
@@ -19,17 +19,23 @@
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-syntax-import-meta": "^7.0.0",
     "@babel/preset-env": "^7.2.0",
+    "babel-loader": "^8.0.4",
     "concurrently": "^4.1.0",
-    "nodemon": "^1.18.7"
+    "nodemon": "^1.18.7",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "apollo-server-express": "^2.2.6",
     "babel-eslint": "^10.0.1",
     "body-parser": "^1.18.3",
+    "dotenv-webpack": "^1.5.7",
     "eslint": "^5.9.0",
     "eslint-plugin-react": "^7.11.1",
     "express": "^4.16.4",
     "graphql": "^14.0.2",
-    "graphql-tools": "^4.0.3"
+    "graphql-tools": "^4.0.3",
+    "start-server-webpack-plugin": "^2.2.5"
   }
 }

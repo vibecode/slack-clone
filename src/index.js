@@ -1,10 +1,10 @@
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
-import schema from './schema'
+import { typeDefs, resolvers } from './schema'
 
 const PORT = 5000
 
-const server = new ApolloServer({ schema })
+const server = new ApolloServer({ typeDefs, resolvers })
 
 const app = express()
 server.applyMiddleware({ app })
