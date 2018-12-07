@@ -1,5 +1,5 @@
 {
-  "name": "slack-server",
+  "name": "slack-clone",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/vibecode/slack-clone",
@@ -7,7 +7,9 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "nodemon --exec babel-node index.js"
+    "server": "nodemon --exec babel-node index.js",
+    "client": "cd client && yarn start",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -17,6 +19,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-syntax-import-meta": "^7.0.0",
     "@babel/preset-env": "^7.2.0",
-    "nodemon": "^1.18.7"
+    "nodemon": "^1.18.7",
+    "concurrently": "^4.1.0"
   }
 }
