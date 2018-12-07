@@ -1,1 +1,3 @@
-console.log('lolkek')
+import { eslint } from 'eslint'
+
+const = 
