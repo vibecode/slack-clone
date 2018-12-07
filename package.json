@@ -23,8 +23,13 @@
     "nodemon": "^1.18.7"
   },
   "dependencies": {
+    "apollo-server-express": "^2.2.6",
     "babel-eslint": "^10.0.1",
+    "body-parser": "^1.18.3",
     "eslint": "^5.9.0",
-    "eslint-plugin-react": "^7.11.1"
+    "eslint-plugin-react": "^7.11.1",
+    "express": "^4.16.4",
+    "graphql": "^14.0.2",
+    "graphql-tools": "^4.0.3"
   }
 }
