@@ -1,12 +1,8 @@
 import express from 'express'
-import { ApolloServer, gql } from 'apollo-server-express'
-import { makeExecutableSchema } from 'graphql-tools'
-import typeDefs from './schema'
-import resolvers from './resolvers'
+import { ApolloServer } from 'apollo-server-express'
+import schema from './schema'
 
 const PORT = 5000
-
-const schema = makeExecutableSchema({ typeDefs, resolvers })
 
 const server = new ApolloServer({ schema })
 
