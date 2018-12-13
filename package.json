@@ -36,6 +36,8 @@
     "express": "^4.16.4",
     "graphql": "^14.0.2",
     "graphql-tools": "^4.0.3",
+    "pg": "^7.7.1",
+    "sequelize": "^4.42.0",
     "start-server-webpack-plugin": "^2.2.5"
   }
 }

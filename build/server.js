@@ -23,7 +23,7 @@ require("source-map-support").install();
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "2fed220df0a9bb85aaf3";
+/******/ 	var hotCurrentHash = "6d71fb914e69820db610";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -930,22 +930,192 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var apollo_server_express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! apollo-server-express */ "apollo-server-express");
 /* harmony import */ var apollo_server_express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(apollo_server_express__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _schema__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./schema */ "./src/schema.js");
+/* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./models */ "./src/models/index.js");
+
 
 
 
 var PORT = 5000;
 var server = new apollo_server_express__WEBPACK_IMPORTED_MODULE_1__["ApolloServer"]({
-  schema: _schema__WEBPACK_IMPORTED_MODULE_2__["default"]
+  typeDefs: _schema__WEBPACK_IMPORTED_MODULE_2__["typeDefs"],
+  resolvers: _schema__WEBPACK_IMPORTED_MODULE_2__["resolvers"]
 });
 var app = express__WEBPACK_IMPORTED_MODULE_0___default()();
 server.applyMiddleware({
   app: app
 });
-app.listen(PORT, function () {
-  return (//eslint-disable-next-line
-    console.log("\uD83D\uDE80  Server is listening at http://localhost:".concat(PORT).concat(server.graphqlPath))
-  );
+_models__WEBPACK_IMPORTED_MODULE_3__["default"].sequelize.sync().then(function () {
+  app.listen(PORT, function () {
+    return (//eslint-disable-next-line
+      console.log("\uD83D\uDE80  Server is listening at http://localhost:".concat(PORT).concat(server.graphqlPath))
+    );
+  });
 });
+
+/***/ }),
+
+/***/ "./src/models/Channel.js":
+/*!*******************************!*\
+  !*** ./src/models/Channel.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (sequelize, DataTypes) {
+  var Channel = sequelize.define('channel', {
+    name: {
+      type: DataTypes.STRING,
+      public: DataTypes.BOOLEAN
+    }
+  });
+
+  Channel.associate = function (models) {
+    Channel.belongsTo(models.team, {
+      foreignKey: 'teamId'
+    });
+  };
+
+  return Channel;
+});
+
+/***/ }),
+
+/***/ "./src/models/Message.js":
+/*!*******************************!*\
+  !*** ./src/models/Message.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (sequelize, DataTypes) {
+  var Message = sequelize.define('message', {
+    text: DataTypes.STRING
+  });
+
+  Message.associate = function (models) {
+    Message.belongsTo(models.channel, {
+      foreignKey: 'channelId'
+    });
+    Message.belongsTo(models.user, {
+      foreignKey: 'userId'
+    });
+  };
+
+  return Message;
+});
+
+/***/ }),
+
+/***/ "./src/models/Team.js":
+/*!****************************!*\
+  !*** ./src/models/Team.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (sequelize, DataTypes) {
+  var Team = sequelize.define('team', {
+    name: {
+      type: DataTypes.STRING,
+      unique: true
+    }
+  });
+
+  Team.associate = function (models) {
+    Team.belongsToMany(models.user, {
+      through: 'member',
+      foreignKey: 'teamId'
+    });
+    Team.belongsTo(models.user, {
+      foreignKey: 'owner'
+    });
+  };
+
+  return Team;
+});
+
+/***/ }),
+
+/***/ "./src/models/User.js":
+/*!****************************!*\
+  !*** ./src/models/User.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (sequelize, DataTypes) {
+  var User = sequelize.define('user', {
+    username: {
+      type: DataTypes.STRING,
+      unique: true
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
+    password: {
+      type: DataTypes.STRING
+    }
+  });
+
+  User.associate = function (models) {
+    User.belongsToMany(models.team, {
+      through: 'member',
+      foreignKey: 'userId'
+    });
+  };
+
+  return User;
+});
+
+/***/ }),
+
+/***/ "./src/models/index.js":
+/*!*****************************!*\
+  !*** ./src/models/index.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var sequelize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sequelize */ "sequelize");
+/* harmony import */ var sequelize__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sequelize__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./User */ "./src/models/User.js");
+/* harmony import */ var _Channel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Channel */ "./src/models/Channel.js");
+/* harmony import */ var _Team__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Team */ "./src/models/Team.js");
+/* harmony import */ var _Message__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Message */ "./src/models/Message.js");
+
+
+
+
+
+var sequelize = new sequelize__WEBPACK_IMPORTED_MODULE_0___default.a('xczme', 'xczme', null, {
+  host: 'localhost',
+  dialect: 'postgres'
+});
+var importedModels = [_User__WEBPACK_IMPORTED_MODULE_1__["default"], _Channel__WEBPACK_IMPORTED_MODULE_2__["default"], _Team__WEBPACK_IMPORTED_MODULE_3__["default"], _Message__WEBPACK_IMPORTED_MODULE_4__["default"]];
+var models = {};
+importedModels.forEach(function (module) {
+  var sequelizeModel = module(sequelize, sequelize__WEBPACK_IMPORTED_MODULE_0___default.a);
+  models[sequelizeModel.name] = sequelizeModel;
+});
+Object.keys(models).forEach(function (modelName) {
+  if ('associate' in models[modelName]) {
+    models[modelName].associate(models);
+  }
+});
+models.sequelize = sequelize;
+models.Sequelize = sequelize__WEBPACK_IMPORTED_MODULE_0___default.a;
+/* harmony default export */ __webpack_exports__["default"] = (models);
 
 /***/ }),
 
@@ -953,15 +1123,15 @@ app.listen(PORT, function () {
 /*!***********************!*\
   !*** ./src/schema.js ***!
   \***********************/
-/*! exports provided: default */
+/*! exports provided: typeDefs, resolvers */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "typeDefs", function() { return typeDefs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resolvers", function() { return resolvers; });
 /* harmony import */ var apollo_server_express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! apollo-server-express */ "apollo-server-express");
 /* harmony import */ var apollo_server_express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(apollo_server_express__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var graphql_tools__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! graphql-tools */ "graphql-tools");
-/* harmony import */ var graphql_tools__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(graphql_tools__WEBPACK_IMPORTED_MODULE_1__);
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n  type Query {\n    hi: String\n  }\n"]);
 
@@ -975,7 +1145,6 @@ function _templateObject() {
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 
-
 var typeDefs = Object(apollo_server_express__WEBPACK_IMPORTED_MODULE_0__["gql"])(_templateObject());
 var resolvers = {
   Query: {
@@ -984,10 +1153,6 @@ var resolvers = {
     }
   }
 };
-/* harmony default export */ __webpack_exports__["default"] = (Object(graphql_tools__WEBPACK_IMPORTED_MODULE_1__["makeExecutableSchema"])({
-  typeDefs: typeDefs,
-  resolvers: resolvers
-}));
 
 /***/ }),
 
@@ -1026,14 +1191,14 @@ module.exports = require("express");
 
 /***/ }),
 
-/***/ "graphql-tools":
-/*!********************************!*\
-  !*** external "graphql-tools" ***!
-  \********************************/
+/***/ "sequelize":
+/*!****************************!*\
+  !*** external "sequelize" ***!
+  \****************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = require("graphql-tools");
+module.exports = require("sequelize");
 
 /***/ })
 
