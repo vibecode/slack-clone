@@ -1,6 +1,7 @@
 import express from 'express'
-import { ApolloServer } from 'apollo-server-express'
-import { typeDefs, resolvers } from './schema'
+import { ApolloServer, gqltag } from 'apollo-server-express'
+import typeDefs from './schema'
+import resolvers from './resolvers'
 import models from './models'
 
 const PORT = 5000

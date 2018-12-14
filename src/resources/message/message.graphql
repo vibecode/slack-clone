@@ -1,6 +1,6 @@
 type Message {
   id: Int!
-  text: Strinq!
+  text: String!
   user: User!
   channel: Channel!
 }

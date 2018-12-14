@@ -11,7 +11,7 @@ const models = {}
 //this will load models from directory with webpack
 //require.context(directory, useSubdirectories, regExp)
 //https://webpack.js.org/guides/dependency-management/#require-context
-const ctx = require.context('.', true, /^(?!index\.js).*model\.js$/, 'sync')
+const ctx = require.context('.', true, /\.model\.js$/, 'sync')
 
 ctx
   .keys()

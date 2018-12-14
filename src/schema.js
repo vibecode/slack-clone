@@ -1,12 +1,5 @@
-import { gql } from 'apollo-server-express'
+import { mergeTypes } from 'merge-graphql-schemas'
 
-export const typeDefs = gql`
-  type Query {
-    hi: String
-  }
-`
-export const resolvers = {
-  Query: {
-    hi: (parent, args, context, info) => 'hi'
-  }
-}
+const ctx = require.context('.', true, /\.graphql$/)
+
+export default mergeTypes(ctx.keys().map(ctx))
