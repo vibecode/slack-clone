@@ -2,7 +2,8 @@ import Sequelize from 'sequelize'
 
 const sequelize = new Sequelize('slack', 'postgres', null, {
   host: 'localhost',
-  dialect: 'postgres'
+  dialect: 'postgres',
+  underscored: true
 })
 
 const models = {}
@@ -10,7 +11,7 @@ const models = {}
 //this will load models from directory with webpack
 //require.context(directory, useSubdirectories, regExp)
 //https://webpack.js.org/guides/dependency-management/#require-context
-const ctx = require.context('.', false, /^\.\/(?!index\.js).*\.js$/, 'sync')
+const ctx = require.context('.', true, /^(?!index\.js).*model\.js$/, 'sync')
 
 ctx
   .keys()
