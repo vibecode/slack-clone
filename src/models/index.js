@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 
-const sequelize = new Sequelize('xczme', 'xczme', null, {
+const sequelize = new Sequelize('slack', 'postgres', null, {
   host: 'localhost',
   dialect: 'postgres'
 })
