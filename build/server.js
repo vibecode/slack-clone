@@ -23,7 +23,7 @@ require("source-map-support").install();
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "6d71fb914e69820db610";
+/******/ 	var hotCurrentHash = "6033742abed4a38324e0";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -954,6 +954,43 @@ _models__WEBPACK_IMPORTED_MODULE_3__["default"].sequelize.sync().then(function (
 
 /***/ }),
 
+/***/ "./src/models sync ^\\.\\/(?!index\\.js).*\\.js$":
+/*!****************************************************************!*\
+  !*** ./src/models sync nonrecursive ^\.\/(?!index\.js).*\.js$ ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./Channel.js": "./src/models/Channel.js",
+	"./Message.js": "./src/models/Message.js",
+	"./Team.js": "./src/models/Team.js",
+	"./User.js": "./src/models/User.js"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	var id = map[req];
+	if(!(id + 1)) { // check for number or string
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return id;
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./src/models sync ^\\.\\/(?!index\\.js).*\\.js$";
+
+/***/ }),
+
 /***/ "./src/models/Channel.js":
 /*!*******************************!*\
   !*** ./src/models/Channel.js ***!
@@ -1089,23 +1126,21 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sequelize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! sequelize */ "sequelize");
 /* harmony import */ var sequelize__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sequelize__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./User */ "./src/models/User.js");
-/* harmony import */ var _Channel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Channel */ "./src/models/Channel.js");
-/* harmony import */ var _Team__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Team */ "./src/models/Team.js");
-/* harmony import */ var _Message__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Message */ "./src/models/Message.js");
-
-
-
-
 
 var sequelize = new sequelize__WEBPACK_IMPORTED_MODULE_0___default.a('xczme', 'xczme', null, {
   host: 'localhost',
   dialect: 'postgres'
 });
-var importedModels = [_User__WEBPACK_IMPORTED_MODULE_1__["default"], _Channel__WEBPACK_IMPORTED_MODULE_2__["default"], _Team__WEBPACK_IMPORTED_MODULE_3__["default"], _Message__WEBPACK_IMPORTED_MODULE_4__["default"]];
-var models = {};
-importedModels.forEach(function (module) {
-  var sequelizeModel = module(sequelize, sequelize__WEBPACK_IMPORTED_MODULE_0___default.a);
+var models = {}; //this will load models from directory with webpack
+//require.context(directory, useSubdirectories, regExp)
+//https://webpack.js.org/guides/dependency-management/#require-context
+
+var ctx = __webpack_require__("./src/models sync ^\\.\\/(?!index\\.js).*\\.js$");
+
+ctx.keys().map(ctx).forEach(function (module) {
+  //we should call module.default with es6
+  //default export instead of calling module dirrectly
+  var sequelizeModel = module.default(sequelize, sequelize__WEBPACK_IMPORTED_MODULE_0___default.a);
   models[sequelizeModel.name] = sequelizeModel;
 });
 Object.keys(models).forEach(function (modelName) {

@@ -1,21 +1,26 @@
 import Sequelize from 'sequelize'
-import User from './User'
-import Channel from './Channel'
-import Team from './Team'
-import Message from './Message'
 
 const sequelize = new Sequelize('xczme', 'xczme', null, {
   host: 'localhost',
   dialect: 'postgres'
 })
 
-const importedModels = [User, Channel, Team, Message]
 const models = {}
 
-importedModels.forEach(module => {
-  const sequelizeModel = module(sequelize, Sequelize)
-  models[sequelizeModel.name] = sequelizeModel
-})
+//this will load models from directory with webpack
+//require.context(directory, useSubdirectories, regExp)
+//https://webpack.js.org/guides/dependency-management/#require-context
+const ctx = require.context('.', false, /^\.\/(?!index\.js).*\.js$/, 'sync')
+
+ctx
+  .keys()
+  .map(ctx)
+  .forEach(module => {
+    //we should call module.default with es6
+    //default export instead of calling module dirrectly
+    const sequelizeModel = module.default(sequelize, Sequelize)
+    models[sequelizeModel.name] = sequelizeModel
+  })
 
 Object.keys(models).forEach(modelName => {
   if ('associate' in models[modelName]) {
