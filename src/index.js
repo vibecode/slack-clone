@@ -1,17 +1,27 @@
 import express from 'express'
-import { ApolloServer, gqltag } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import typeDefs from './schema'
 import resolvers from './resolvers'
 import models from './models'
 
 const PORT = 5000
 
-const server = new ApolloServer({ typeDefs, resolvers })
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: {
+    models,
+    user: {
+      id: 1
+    }
+  }
+})
 
 const app = express()
+
 server.applyMiddleware({ app })
 
-models.sequelize.sync({ force: true }).then(() => {
+models.sequelize.sync(/* { force: true } */).then(() => {
   app.listen(PORT, () =>
     //eslint-disable-next-line
     console.log(

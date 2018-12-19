@@ -1,8 +1,8 @@
 export default {
   Mutation: {
-    createChannel: async (parent, args, { models }) => {
+    createTeam: async (parent, args, { models, user }) => {
       try {
-        await models.channel.create(args)
+        await models.team.create({ ...args, owner: user.id })
         return true
       } catch (err) {
         console.log(err)

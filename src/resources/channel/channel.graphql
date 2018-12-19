@@ -7,5 +7,9 @@ type Channel {
 }
 
 type Query {
-  hi: Channel!
+  hi: String!
+}
+
+type Mutation {
+  createChannel(teamId: Int!, name: String!, public: Boolean = false): Boolean!
 }
