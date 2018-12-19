@@ -1,5 +1,15 @@
 import { mergeTypes } from 'merge-graphql-schemas'
 
-const ctx = require.context('.', true, /\.graphql$/)
+const baseSchema = `
+  schema {
+    query: Query
+  }
+`
 
-export default mergeTypes(ctx.keys().map(ctx))
+const ctx = require.context('.', true, /\.graphql$/)
+const schema = ctx
+  .keys()
+  .map(ctx)
+  .concat(baseSchema)
+
+export default mergeTypes(schema)
