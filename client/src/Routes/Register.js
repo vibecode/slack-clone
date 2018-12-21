@@ -1,16 +1,20 @@
 import React, { PureComponent } from 'react'
-import { Container, Header, Input, Button } from 'semantic-ui-react'
-import { Mutation } from 'react-apollo'
+import { Container, Header, Input, Button, Message } from 'semantic-ui-react'
+import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-const REGISTER = gql`
+const REGISTER_MUTATION = gql`
   mutation RegisterUser(
     $username: String!
     $email: String!
     $password: String!
   ) {
     register(username: $username, email: $email, password: $password) {
-      username
+      ok
+      errors {
+        path
+        message
+      }
     }
   }
 `
@@ -19,7 +23,16 @@ export class Register extends PureComponent {
   initialState = {
     username: '',
     email: '',
-    password: ''
+    password: '',
+    usernameError: '',
+    emailError: '',
+    passwordError: ''
+  }
+
+  clearErrors = {
+    usernameError: '',
+    emailError: '',
+    passwordError: ''
   }
 
   state = this.initialState
@@ -30,29 +43,61 @@ export class Register extends PureComponent {
     })
   }
 
-  onSubmit = async register => {
-    try {
-      await register({
-        variables: { ...this.state }
-      })
-    } catch (err) {
-      console.log(err)
-    }
-
-    this.setState(this.initialState)
-  }
-
-  renderContent = (register, { error, loading }) => {
+  onSubmit = () => {
     const { email, username, password } = this.state
 
-    if (error) {
+    this.setState(this.clearErrors, async () => {
+      try {
+        const response = await this.props.mutate({
+          variables: { username, email, password }
+        })
+
+        const { ok, errors } = response.data.register
+
+        if (ok) {
+          this.props.history.replace('/')
+        } else {
+          const err = {}
+
+          errors.forEach(({ path, message }) => {
+            err[`${path}Error`] = message
+          })
+
+          console.log(err)
+
+          this.setState(err)
+        }
+      } catch (err) {
+        console.error(err)
+      }
+    })
+  }
+
+  renderContent = () => {
+    const {
+      email,
+      username,
+      password,
+      usernameError,
+      emailError,
+      passwordError
+    } = this.state
+
+    if (false) {
       return <h1>Something went wrong</h1>
     }
 
+    const errorMessages = []
+
+    if (usernameError) errorMessages.push(usernameError)
+    if (passwordError) errorMessages.push(passwordError)
+    if (emailError) errorMessages.push(emailError)
+
     return (
-      <Container>
+      <Container text>
         <Header>Sign Up:</Header>
         <Input
+          error={!!usernameError}
           name="username"
           placeholder="Username"
           fluid
@@ -60,6 +105,7 @@ export class Register extends PureComponent {
           onChange={this.onInputChange}
         />
         <Input
+          error={!!emailError}
           name="email"
           placeholder="Email"
           fluid
@@ -67,6 +113,7 @@ export class Register extends PureComponent {
           onChange={this.onInputChange}
         />
         <Input
+          error={!!passwordError}
           name="password"
           placeholder="Password"
           type="password"
@@ -74,20 +121,20 @@ export class Register extends PureComponent {
           value={password}
           onChange={this.onInputChange}
         />
-        <Button
-          onClick={() => this.onSubmit(register)}
-          color={'green'}
-          loading={loading}
-        >
+
+        <Button onClick={this.onSubmit} color={'green'}>
           Submit
         </Button>
+        {usernameError || emailError || passwordError ? (
+          <Message list={errorMessages} error />
+        ) : null}
       </Container>
     )
   }
 
   render() {
-    return <Mutation mutation={REGISTER}>{this.renderContent}</Mutation>
+    return this.renderContent()
   }
 }
 
-export default Register
+export default graphql(REGISTER_MUTATION)(Register)
