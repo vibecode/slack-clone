@@ -21,6 +21,7 @@ const REGISTER_MUTATION = gql`
 
 export class Register extends PureComponent {
   initialState = {
+    loading: false,
     username: '',
     email: '',
     password: '',
@@ -46,7 +47,7 @@ export class Register extends PureComponent {
   onSubmit = () => {
     const { email, username, password } = this.state
 
-    this.setState(this.clearErrors, async () => {
+    this.setState({ ...this.clearErrors, loading: true }, async () => {
       try {
         const response = await this.props.mutate({
           variables: { username, email, password }
@@ -63,9 +64,7 @@ export class Register extends PureComponent {
             err[`${path}Error`] = message
           })
 
-          console.log(err)
-
-          this.setState(err)
+          this.setState({ loading: false, ...err })
         }
       } catch (err) {
         console.error(err)
@@ -122,7 +121,11 @@ export class Register extends PureComponent {
           onChange={this.onInputChange}
         />
 
-        <Button onClick={this.onSubmit} color={'green'}>
+        <Button
+          onClick={this.onSubmit}
+          color={'green'}
+          loading={this.state.loading}
+        >
           Submit
         </Button>
         {usernameError || emailError || passwordError ? (
