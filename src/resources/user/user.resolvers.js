@@ -8,13 +8,9 @@ export default {
     allUsers: (parent, args, { models }) => models.user.findAll({})
   },
   Mutation: {
-    register: async (parent, { password, ...restArgs }, { models }) => {
+    register: async (parent, args, { models }) => {
       try {
-        const hashedPassword = await bcrypt.hash(password, 12)
-        const user = await models.user.create({
-          ...restArgs,
-          password: hashedPassword
-        })
+        const user = await models.user.create(args)
 
         return {
           ok: true,
