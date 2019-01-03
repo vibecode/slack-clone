@@ -1,5 +1,12 @@
 import React, { PureComponent } from 'react'
-import { Container, Header, Input, Button, Message } from 'semantic-ui-react'
+import {
+  Form,
+  Container,
+  Header,
+  Input,
+  Button,
+  Message
+} from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -95,40 +102,45 @@ export class Register extends PureComponent {
     return (
       <Container text>
         <Header>Sign Up:</Header>
-        <Input
-          error={!!usernameError}
-          name="username"
-          placeholder="Username"
-          fluid
-          value={username}
-          onChange={this.onInputChange}
-        />
-        <Input
-          error={!!emailError}
-          name="email"
-          placeholder="Email"
-          fluid
-          value={email}
-          onChange={this.onInputChange}
-        />
-        <Input
-          error={!!passwordError}
-          name="password"
-          placeholder="Password"
-          type="password"
-          fluid
-          value={password}
-          onChange={this.onInputChange}
-        />
 
-        <Button
-          onClick={this.onSubmit}
-          color={'green'}
-          loading={this.state.loading}
-        >
-          Submit
-        </Button>
-        {usernameError || emailError || passwordError ? (
+        <Form>
+          <Form.Field error={!!usernameError}>
+            <Input
+              name="username"
+              placeholder="Username"
+              fluid
+              value={username}
+              onChange={this.onInputChange}
+            />
+          </Form.Field>
+          <Form.Field error={!!emailError}>
+            <Input
+              name="email"
+              placeholder="Email"
+              fluid
+              value={email}
+              onChange={this.onInputChange}
+            />
+          </Form.Field>
+          <Form.Field error={!!passwordError}>
+            <Input
+              name="password"
+              placeholder="Password"
+              type="password"
+              fluid
+              value={password}
+              onChange={this.onInputChange}
+            />
+          </Form.Field>
+          <Button
+            onClick={this.onSubmit}
+            color={'green'}
+            loading={this.state.loading}
+          >
+            Submit
+          </Button>
+        </Form>
+        {errorMessages.length > 0 ? (
           <Message list={errorMessages} error />
         ) : null}
       </Container>
