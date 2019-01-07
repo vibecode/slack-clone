@@ -3,8 +3,9 @@ import { ApolloServer } from 'apollo-server-express'
 import typeDefs from './schema'
 import resolvers from './resolvers'
 import models from './models'
+import config from './config'
 
-const PORT = 5000
+const { SECRET_1, SECRET_2, PORT } = config
 
 const server = new ApolloServer({
   typeDefs,
@@ -13,7 +14,9 @@ const server = new ApolloServer({
     models,
     user: {
       id: 1
-    }
+    },
+    SECRET_1,
+    SECRET_2
   }
 })
 

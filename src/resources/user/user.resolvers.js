@@ -1,5 +1,5 @@
-import bcrypt from 'bcrypt'
 import formatErrors from '../../error/formatErrors'
+import { tryLogin } from '../../auth'
 
 export default {
   Query: {
@@ -8,6 +8,8 @@ export default {
     allUsers: (parent, args, { models }) => models.user.findAll({})
   },
   Mutation: {
+    login: (parent, { email, password }, { models, SECRET_1, SECRET_2 }) =>
+      tryLogin(email, password, models, SECRET_1, SECRET_2),
     register: async (parent, args, { models }) => {
       try {
         const user = await models.user.create(args)
