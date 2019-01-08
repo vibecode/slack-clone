@@ -46,7 +46,7 @@ export class Login extends Component {
 
     if (ok) {
       localStorage.setItem('token', token)
-      localStorage.setItem('refreshToken', token)
+      localStorage.setItem('refreshToken', refreshToken)
     }
   }
 
