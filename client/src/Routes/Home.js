@@ -6,6 +6,7 @@ const ALL_USERS = gql`
   {
     allUsers {
       username
+      id
     }
   }
 `
@@ -16,7 +17,6 @@ const Home = () => {
       {({ loading, error, data }) => {
         if (loading) return <p>Loading...</p>
         if (error) return <p>Error</p>
-
         return data.allUsers.map(({ username, id }) => (
           <p key={id}>i'm here: {username}</p>
         ))
