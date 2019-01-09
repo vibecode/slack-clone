@@ -14,20 +14,6 @@ const httpLink = createHttpLink({
   uri: '/graphql'
 })
 
-// const authLink = setContext((_, { headers }) => {
-//   // get the authentication token from local storage if it exists
-//   const token = localStorage.getItem('token')
-//   const refreshToken = localStorage.getItem('refreshToken')
-//   // return the headers to the context so httpLink can read them
-//   return {
-//     headers: {
-//       ...headers,
-//       'x-token': token || '',
-//       'x-refresh-token': refreshToken || ''
-//     }
-//   }
-// })
-
 const authMiddleware = new ApolloLink((operation, forward) => {
   const token = localStorage.getItem('token')
   const refreshToken = localStorage.getItem('refreshToken')
