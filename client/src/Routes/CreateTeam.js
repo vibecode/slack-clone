@@ -46,9 +46,17 @@ export class CreateTeam extends Component {
 
     this.loading = true
 
-    const response = await this.props.mutate({
-      variables: { name }
-    })
+    let response = null
+
+    try {
+      response = await this.props.mutate({
+        variables: { name }
+      })
+    } catch (err) {
+      console.log(err)
+      this.props.history.push('/login')
+      return
+    }
 
     this.loading = false
 
