@@ -6,7 +6,7 @@ export default {
     createTeam: requiresAuth.createResolver(
       async (parent, args, { models, user }) => {
         try {
-          await models.Team.create({ ...args, owner: user.id })
+          await models.team.create({ ...args, owner: user.id })
           return {
             ok: true
           }

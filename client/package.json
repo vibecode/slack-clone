@@ -8,6 +8,7 @@
     "apollo-link-context": "^1.0.12",
     "apollo-link-http": "^1.5.9",
     "graphql": "^14.0.2",
+    "jwt-decode": "^2.2.0",
     "mobx": "^5.8.0",
     "mobx-react": "^5.4.3",
     "react": "^16.6.3",
