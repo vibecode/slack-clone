@@ -2,6 +2,7 @@ import Sequelize from 'sequelize'
 
 const sequelize = new Sequelize('slack', 'postgres', null, {
   host: 'localhost',
+  operatorsAliases: Sequelize.Op,
   dialect: 'postgres',
   define: {
     underscored: true
