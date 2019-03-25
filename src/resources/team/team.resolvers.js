@@ -5,7 +5,7 @@ export default {
   Query: {
     allTeams: requiresAuth.createResolver(
       async (parent, args, { models, user }) =>
-        models.team.findAll({ owner: user.id }, { raw: true })
+        models.team.findAll({ where: { owner: user.id } }, { raw: true })
     )
   },
   Mutation: {
