@@ -12,9 +12,16 @@ export default {
     createTeam: requiresAuth.createResolver(
       async (parent, args, { models, user }) => {
         try {
-          await models.team.create({ ...args, owner: user.id })
+          const team = await models.team.create({ ...args, owner: user.id })
+
+          await models.channel.create({
+            name: 'general',
+            public: true,
+            teamId: team.id
+          })
           return {
-            ok: true
+            ok: true,
+            team
           }
         } catch (err) {
           console.log(err)
@@ -26,5 +33,9 @@ export default {
         }
       }
     )
+  },
+  Team: {
+    channels: ({ id }, args, { models }) =>
+      models.channel.findAll({ where: { teamId: id } })
   }
 }
